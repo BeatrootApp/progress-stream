@@ -5,7 +5,7 @@ module.exports = function(options, onprogress) {
 	if (typeof options === 'function') return module.exports(null, options);
 	options = options || {};
 
-	var length = options.length || 0;
+	var length = options.length || null;
 	var time = options.time || 0;
 	var drain = options.drain || false;
 	var transferred = options.transferred || 0;
@@ -57,12 +57,12 @@ module.exports = function(options, onprogress) {
 		update.remaining = length - update.transferred;
 		tr.emit('length', length);
 	};
-	
+
 	// Expose `onlength()` handler as `setLength()` to support custom use cases where length
 	// is not known until after a few chunks have already been pumped, or is
 	// calculated on the fly.
 	tr.setLength = onlength;
-	
+
 	tr.on('pipe', function(stream) {
 		if (typeof length === 'number') return;
 		// Support http module
