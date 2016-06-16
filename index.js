@@ -5,7 +5,7 @@ module.exports = function(options, onprogress) {
 	if (typeof options === 'function') return module.exports(null, options);
 	options = options || {};
 
-	var length = options.length || null;
+	var length = options.length || 0;
 	var time = options.time || 0;
 	var drain = options.drain || false;
 	var transferred = options.transferred || 0;
@@ -64,7 +64,7 @@ module.exports = function(options, onprogress) {
 	tr.setLength = onlength;
 
 	tr.on('pipe', function(stream) {
-		if (typeof length === 'number') return;
+		if (options.length && typeof length === 'number') return;
 		// Support http module
 		if (stream.readable && !stream.writable && stream.headers) {
 			return onlength(parseInt(stream.headers['content-length'] || 0));
